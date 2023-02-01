@@ -1,0 +1,2 @@
+int String double
+double double int
