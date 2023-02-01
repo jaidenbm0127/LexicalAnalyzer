@@ -18,26 +18,45 @@ public class LexicalAnalyzer {
         int row = 1;
 
         while ((strCurrentLine = reader.readLine()) != null) {
-            int column = 1;
-            String[] spaceDelimited = strCurrentLine.split(" ");
-            for(String token : spaceDelimited)
-            {
-                String keyword = IsKeyword(token);
-                char[] individualCharacters = token.toCharArray();
+            int column = 0;
 
-                if(!keyword.equals(""))
+            char[] characters = strCurrentLine.toCharArray();
+            for(char c : characters)
+            {
+                String keyword;
+                if(c == 'i')
                 {
-                    System.out.println(row + ":" + column + " " + keyword);
-                    column += keyword.toCharArray().length + 1;
+                    keyword = IsKeyword(characters, column, column + 3);
+                    if(!keyword.equals(""))
+                    {
+                        System.out.println(row + ":" + (column + 1) + " " + keyword);
+                    }
                 }
+                else if(c == 'd' || c == 'S')
+                {
+                    keyword = IsKeyword(characters, column, column + 6);
+                    if(!keyword.equals(""))
+                    {
+                        System.out.println(row + ":" + (column + 1) + " " + keyword);
+                    }
+                }
+                column += 1;
             }
+
             row += 1;
         }
     }
 
-    public String IsKeyword(String token)
+    public String IsKeyword(char[] charArray, int start, int end)
     {
-        switch (token) {
+        StringBuilder temp = new StringBuilder();
+
+        for(int i = start; i < end; i ++)
+        {
+            temp.append(charArray[i]);
+        }
+
+        switch (temp.toString()) {
             case Keywords.INT ->
             {
                 return "int";
