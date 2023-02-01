@@ -1,2 +1,2 @@
-int String double
-double double int
+int (*/ String double
+double double +-) int

@@ -1,11 +1,11 @@
 public class Operators {
-    public static final String EQUAL = "=";
-    public static final String LEFT_PARENTHESIS = "(";
-    public static final String RIGHT_PARENTHESIS = ")";
-    public static final String PLUS = "+";
-    public static final String MINUS = "-";
-    public static final String MULTIPLICATION = "*";
-    public static final String DIVISION = "/";
-    public static final String COMMA = ",";
-    public static final String SEMICOLON = ";";
+    public static final char EQUAL = '=';
+    public static final char LEFT_PARENTHESIS = '(';
+    public static final char RIGHT_PARENTHESIS = ')';
+    public static final char PLUS = '+';
+    public static final char MINUS = '-';
+    public static final char MULTIPLICATION = '*';
+    public static final char DIVISION = '/';
+    public static final char COMMA = ',';
+    public static final char SEMICOLON = ';';
 }

@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -18,36 +17,61 @@ public class LexicalAnalyzer {
         int row = 1;
 
         while ((strCurrentLine = reader.readLine()) != null) {
-            int column = 0;
 
             char[] characters = strCurrentLine.toCharArray();
-            for(char c : characters)
-            {
-                String keyword;
-                if(c == 'i')
-                {
-                    keyword = IsKeyword(characters, column, column + 3);
-                    if(!keyword.equals(""))
-                    {
-                        System.out.println(row + ":" + (column + 1) + " " + keyword);
-                    }
-                }
-                else if(c == 'd' || c == 'S')
-                {
-                    keyword = IsKeyword(characters, column, column + 6);
-                    if(!keyword.equals(""))
-                    {
-                        System.out.println(row + ":" + (column + 1) + " " + keyword);
-                    }
-                }
-                column += 1;
-            }
+            CheckCharacters(characters, row);
 
             row += 1;
         }
     }
 
-    public String IsKeyword(char[] charArray, int start, int end)
+    public void CheckCharacters(char[] charArray, int row)
+    {
+        int column = 0;
+        for(char c : charArray)
+        {
+            if(c == 'i')
+            {
+                String keyword = CheckKeyword(charArray, column, column + 3);
+                if(!keyword.equals(""))
+                {
+                    System.out.println(row + ":" + (column + 1) + " " + keyword);
+                }
+            }
+            else if(c == 'd' || c == 'S')
+            {
+                String keyword = CheckKeyword(charArray, column, column + 6);
+                if(!keyword.equals(""))
+                {
+                    System.out.println(row + ":" + (column + 1) + " " + keyword);
+                }
+            }
+
+            if(CheckOperators(c))
+            {
+                System.out.println(row + ":" + (column + 1) + " " + c);
+            }
+            column += 1;
+        }
+    }
+
+    public boolean CheckOperators(char c)
+    {
+        switch(c)
+        {
+            case Operators.EQUAL, Operators.MULTIPLICATION, Operators.LEFT_PARENTHESIS, Operators.RIGHT_PARENTHESIS,
+                    Operators.PLUS, Operators.MINUS, Operators.DIVISION, Operators.COMMA, Operators.SEMICOLON ->
+            {
+                return true;
+            }
+            default ->
+            {
+                return false;
+            }
+        }
+    }
+
+    public String CheckKeyword(char[] charArray, int start, int end)
     {
         StringBuilder temp = new StringBuilder();
 
