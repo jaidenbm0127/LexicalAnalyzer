@@ -1,2 +1,2 @@
-int (*/ String double
-double double +-) int
+int a, b=10;
+a =bc*10-&(3.2+"abc";

@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class LexicalAnalyzer {
 
@@ -27,32 +28,125 @@ public class LexicalAnalyzer {
 
     public void CheckCharacters(char[] charArray, int row)
     {
-        int column = 0;
-        for(char c : charArray)
+        for(int column = 0; column < charArray.length; column++)
         {
-            if(c == 'i')
+            // System.out.println(charArray[column]);
+            if(charArray[column] == 'i')
             {
                 String keyword = CheckKeyword(charArray, column, column + 3);
                 if(!keyword.equals(""))
                 {
-                    System.out.println(row + ":" + (column + 1) + " " + keyword);
+                    System.out.println(row + ":" + (column + 1) + " keyword: " + keyword);
+                    column += 3;
                 }
             }
-            else if(c == 'd' || c == 'S')
+            else if(charArray[column] == 'd' || charArray[column] == 'S')
             {
                 String keyword = CheckKeyword(charArray, column, column + 6);
                 if(!keyword.equals(""))
                 {
-                    System.out.println(row + ":" + (column + 1) + " " + keyword);
+                    System.out.println(row + ":" + (column + 1) + " keyword: " + keyword);
+                    column += 6;
                 }
             }
 
-            if(CheckOperators(c))
+            else if(CheckOperators(charArray[column]))
             {
-                System.out.println(row + ":" + (column + 1) + " " + c);
+                System.out.println(row + ":" + (column + 1) + " operator: " + charArray[column]);
             }
-            column += 1;
+            else if(Character.isLetter(charArray[column]))
+            {
+                if (IsIdentifier(charArray, column))
+                {
+                    System.out.println(row + ":" + (column + 1) + " identifier: " + charArray[column] + charArray[column+1]);
+                    column++;
+                }
+                else
+                {
+                    System.out.println(row + ":" + (column + 1) + " identifier: " + charArray[column]);
+                }
+            }
+            else if(Character.isDigit(charArray[column]))
+            {
+                String constant = GetInt(charArray, column);
+                if(constant.contains("."))
+                {
+                    System.out.println(row + ":" + (column + 1) + " constant double: " + constant);
+                }
+                else
+                {
+                    System.out.println(row + ":" + (column + 1) + " constant int: " + constant);
+                }
+                column += constant.length() - 1;
+            }
+            else if(charArray[column] == '"')
+            {
+                String stringLiteral = GetString(charArray, column);
+
+                if(stringLiteral.chars().filter(ch -> ch == '"').count() == 2)
+                {
+                    System.out.println(row + ":" + (column + 1) + " string literal: " + stringLiteral);
+                }
+                else
+                {
+                    System.out.println(row + ":" + (column + 1) + " error: " + stringLiteral + " not recognized");
+                }
+                column +=  stringLiteral.length() - 1;
+            }
         }
+    }
+
+    public String GetString(char[] charArray, int start)
+    {
+        StringBuilder temp = new StringBuilder();
+        temp.append("\"");
+        for(int i = start + 1; i < charArray.length; i++)
+        {
+            temp.append(charArray[i]);
+            if(charArray[i] == '"')
+            {
+                break;
+            }
+        }
+        return temp.toString();
+    }
+
+    public String GetInt(char[] charArray, int start)
+    {
+        int indexer = start;
+        StringBuilder temp = new StringBuilder();
+        while(Character.isDigit(charArray[indexer]) || charArray[indexer] == '.')
+        {
+            if(charArray[indexer] == '.')
+            {
+                return GetDouble(charArray, start);
+            }
+            else
+            {
+                temp.append(charArray[indexer]);
+                indexer++;
+            }
+        }
+
+        return temp.toString();
+    }
+
+    public String GetDouble(char[] charArray, int start)
+    {
+        int indexer = start;
+        StringBuilder temp = new StringBuilder();
+        while(Character.isDigit(charArray[indexer]) || charArray[indexer] == '.')
+        {
+            temp.append(charArray[indexer]);
+            indexer++;
+        }
+
+        return temp.toString();
+    }
+
+    public boolean IsIdentifier(char[] charArray, int start)
+    {
+        return Character.isLetter(charArray[start + 1]) || Character.isDigit(charArray[start + 1]);
     }
 
     public boolean CheckOperators(char c)
@@ -100,7 +194,11 @@ public class LexicalAnalyzer {
         }
     }
     public static void main(String[] args) throws IOException {
-        LexicalAnalyzer analyzer = new LexicalAnalyzer("test.txt");
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter file name: ");
+        String fileName = input.nextLine();
+
+        LexicalAnalyzer analyzer = new LexicalAnalyzer(fileName);
         analyzer.ProcessLines();
     }
 }
