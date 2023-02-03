@@ -125,6 +125,10 @@ public class LexicalAnalyzer {
             {
                 temp.append(charArray[indexer]);
                 indexer++;
+                if(indexer == charArray.length)
+                {
+                    break;
+                }
             }
         }
 
@@ -133,12 +137,17 @@ public class LexicalAnalyzer {
 
     public String GetDouble(char[] charArray, int start)
     {
+        System.out.println(start);
         int indexer = start;
         StringBuilder temp = new StringBuilder();
         while(Character.isDigit(charArray[indexer]) || charArray[indexer] == '.')
         {
             temp.append(charArray[indexer]);
             indexer++;
+            if(indexer == charArray.length)
+            {
+                break;
+            }
         }
 
         return temp.toString();
