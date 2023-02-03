@@ -26,7 +26,7 @@ public class LexicalAnalyzer {
         }
     }
 
-    public void CheckCharacters(char[] charArray, int row)
+    private void CheckCharacters(char[] charArray, int row)
     {
         for(int column = 0; column < charArray.length; column++)
         {
@@ -100,7 +100,7 @@ public class LexicalAnalyzer {
         }
     }
 
-    public String GetString(char[] charArray, int start)
+    private String GetString(char[] charArray, int start)
     {
         StringBuilder temp = new StringBuilder();
         temp.append("\"");
@@ -115,7 +115,7 @@ public class LexicalAnalyzer {
         return temp.toString();
     }
 
-    public String GetInt(char[] charArray, int start)
+    private String GetInt(char[] charArray, int start)
     {
         int indexer = start;
         StringBuilder temp = new StringBuilder();
@@ -139,7 +139,7 @@ public class LexicalAnalyzer {
         return temp.toString();
     }
 
-    public String GetDouble(char[] charArray, int start)
+    private String GetDouble(char[] charArray, int start)
     {
         int indexer = start;
         StringBuilder temp = new StringBuilder();
@@ -156,12 +156,12 @@ public class LexicalAnalyzer {
         return temp.toString();
     }
 
-    public boolean IsTwoCharacterIdentifier(char[] charArray, int start)
+    private boolean IsTwoCharacterIdentifier(char[] charArray, int start)
     {
         return Character.isLetter(charArray[start + 1]) || Character.isDigit(charArray[start + 1]);
     }
 
-    public boolean CheckIfOperator(char c)
+    private boolean CheckIfOperator(char c)
     {
         switch(c)
         {
@@ -177,7 +177,7 @@ public class LexicalAnalyzer {
         }
     }
 
-    public String CheckIfKeyword(char[] charArray, int start, int end)
+    private String CheckIfKeyword(char[] charArray, int start, int end)
     {
         StringBuilder temp = new StringBuilder();
 
