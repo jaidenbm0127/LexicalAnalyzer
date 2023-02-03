@@ -30,33 +30,33 @@ public class LexicalAnalyzer {
     {
         for(int column = 0; column < charArray.length; column++)
         {
-            // System.out.println(charArray[column]);
             if(charArray[column] == 'i')
             {
-                String keyword = CheckKeyword(charArray, column, column + 3);
+                String keyword = CheckIfKeyword(charArray, column, column + 3);
                 if(!keyword.equals(""))
                 {
                     System.out.println(row + ":" + (column + 1) + " keyword: " + keyword);
-                    column += 3;
-                }
-            }
-            else if(charArray[column] == 'd' || charArray[column] == 'S')
-            {
-                String keyword = CheckKeyword(charArray, column, column + 6);
-                if(!keyword.equals(""))
-                {
-                    System.out.println(row + ":" + (column + 1) + " keyword: " + keyword);
-                    column += 6;
+                    column += 2;
                 }
             }
 
-            else if(CheckOperators(charArray[column]))
+            else if(charArray[column] == 'd' || charArray[column] == 'S')
+            {
+                String keyword = CheckIfKeyword(charArray, column, column + 6);
+                if(!keyword.equals(""))
+                {
+                    System.out.println(row + ":" + (column + 1) + " keyword: " + keyword);
+                    column += 5;
+                }
+            }
+
+            else if(CheckIfOperator(charArray[column]))
             {
                 System.out.println(row + ":" + (column + 1) + " operator: " + charArray[column]);
             }
             else if(Character.isLetter(charArray[column]))
             {
-                if (IsIdentifier(charArray, column))
+                if (IsTwoCharacterIdentifier(charArray, column))
                 {
                     System.out.println(row + ":" + (column + 1) + " identifier: " + charArray[column] + charArray[column+1]);
                     column++;
@@ -92,6 +92,10 @@ public class LexicalAnalyzer {
                     System.out.println(row + ":" + (column + 1) + " error: " + stringLiteral + " not recognized");
                 }
                 column +=  stringLiteral.length() - 1;
+            }
+            else
+            {
+                System.out.println(row + ":" + (column + 1) + " error: " + charArray[column] + " not recognized");
             }
         }
     }
@@ -137,7 +141,6 @@ public class LexicalAnalyzer {
 
     public String GetDouble(char[] charArray, int start)
     {
-        System.out.println(start);
         int indexer = start;
         StringBuilder temp = new StringBuilder();
         while(Character.isDigit(charArray[indexer]) || charArray[indexer] == '.')
@@ -153,12 +156,12 @@ public class LexicalAnalyzer {
         return temp.toString();
     }
 
-    public boolean IsIdentifier(char[] charArray, int start)
+    public boolean IsTwoCharacterIdentifier(char[] charArray, int start)
     {
         return Character.isLetter(charArray[start + 1]) || Character.isDigit(charArray[start + 1]);
     }
 
-    public boolean CheckOperators(char c)
+    public boolean CheckIfOperator(char c)
     {
         switch(c)
         {
@@ -174,7 +177,7 @@ public class LexicalAnalyzer {
         }
     }
 
-    public String CheckKeyword(char[] charArray, int start, int end)
+    public String CheckIfKeyword(char[] charArray, int start, int end)
     {
         StringBuilder temp = new StringBuilder();
 
